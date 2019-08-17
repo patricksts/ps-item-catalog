@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row divider green">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner list">
+		<div class="col-md-11 col-md-offset-1 padding-none">
+			<h1>New Thing</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="#" method = "post">
+				<div class="form-group">
+					<label for="name">Name:</label>
+					<input type ="text" maxlength="50" class="form-control" name="name"placeholder="Thing Name">
+
+					<label for="description">Description:</label>
+					<textarea class="form-control" maxlength="250" rows="3" name="description" placeholder="Thing Description"></textarea>
+
+					<label for="category">Type:</label>
+					<div class="radio">
+					  <label>
+					    <input type="radio" name="category" id="category1" value="Junk">Junk
+					  </label>
+					</div>
+					<div class="radio">
+					  <label>
+					    <input type="radio" name="category" id="category2" value="Heirloom">Heirloom
+					  </label>
+					</div>
+					<div class="radio">
+					  <label>
+					    <input type="radio" name="category" id="category3" value="Tool">Tool
+					  </label>
+					</div>
+					<div class="radio">
+					  <label>
+					    <input type="radio" name="category" id="category4" value="Other">Other
+					  </label>
+					</div>
+					<button type="submit" class="btn btn-default" id="submit" type="submit">
+					<span aria-hidden="true"></span>Stow it!</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+
