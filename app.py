@@ -232,10 +232,6 @@ def editPlace(place_id):
         Place).filter_by(id=place_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if editedPlace.user_id != login_session['user_id']:
-        return "<script>function myFunction() \
-            {alert('Hmm. I don't think this is your place. \
-                Make your own!');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
             editedPlace.name = request.form['name']
@@ -252,8 +248,6 @@ def deletePlace(place_id):
         Place).filter_by(id=place_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if placeToDelete.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('That's not your place! You can not get rid of it. Make your own place.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(placeToDelete)
         flash('%s is no more.' % placeToDelete.name)
@@ -287,10 +281,12 @@ def newThing(place_id):
     if 'username' not in login_session:
         return redirect('/login')
     place = session.query(Place).filter_by(id=place_id).one()
-    if login_session['user_id'] != place.user_id:
-        return "<script>function myFunction() {alert('Don't put your stuff in a place that is not yours! Make your own place.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        newThing = Thing(name=request.form['name'], description=request.form['description'], category=request.form['category'], place_id=place_id, user_id=place.user_id)
+        newThing = Thing(
+            name=request.form['name'],
+            description=request.form['description'],
+            category=request.form['category'],
+            place_id=place_id, user_id=place.user_id)
         session.add(newThing)
         session.commit()
         flash('New thing %s is in there' % (newThing.name))
@@ -300,14 +296,14 @@ def newThing(place_id):
 
 
 # EDIT THING
-@app.route('/place/<int:place_id>/list/<int:thing_id>/edit', methods=['GET', 'POST'])
+@app.route(
+    '/place/<int:place_id>/list/<int:thing_id>/edit',
+    methods=['GET', 'POST'])
 def editThing(place_id, thing_id):
     if 'username' not in login_session:
         return redirect('/login')
     editedThing = session.query(Thing).filter_by(id=thing_id).one()
     place = session.query(Place).filter_by(id=place_id).one()
-    if login_session['user_id'] != place.user_id:
-        return "<script>function myFunction() {alert('No messing with what is not yours! Make your own place.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
             editedThing.name = request.form['name']
@@ -320,18 +316,21 @@ def editThing(place_id, thing_id):
         flash('Your thing has been changed.')
         return redirect(url_for('showList', place_id=place_id))
     else:
-        return render_template('edit_thing.html', place_id=place_id, thing_id=thing_id, thing=editedThing)
+        return render_template(
+            'edit_thing.html',
+            place_id=place_id,
+            thing_id=thing_id, thing=editedThing)
 
 
 # DELETE THING
-@app.route('/place/<int:place_id>/list/<int:thing_id>/delete', methods=['GET', 'POST'])
+@app.route(
+    '/place/<int:place_id>/list/<int:thing_id>/delete',
+    methods=['GET', 'POST'])
 def deleteThing(place_id, thing_id):
     if 'username' not in login_session:
         return redirect('/login')
     place = session.query(Place).filter_by(id=place_id).one()
     thingToDelete = session.query(Thing).filter_by(id=thing_id).one()
-    if login_session['user_id'] != place.user_id:
-        return "<script>function myFunction() {alert('You may not get rid of stuff that is not yours! Make your own place.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(thingToDelete)
         session.commit()
