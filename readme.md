@@ -8,6 +8,9 @@ In my case, I have created an app that is for cataloging various items that you 
 You may view the PLACES and THINGS of other users, but you will not be able to alter them in any way.
 
 User authentication is through Google.
+
+
+
 Prerequisites and Setup: (Python 3 is necessary)
 
 1.	Install VirtualBox and Vagrant – Instructions provided by udacity.com
@@ -25,8 +28,7 @@ Other systems: Use your favorite terminal program
 Run the virtual machine!
 Using the terminal, change directory using the command [cd /vagrant]
 
-2.	Clone my Github repository into your vagrant folder: (copy the link below directly into your “git clone” command.
-a.	https://github.com/patricksts/ps-item-catalog.git
+2.	download and extract the attached .zip file into this directory
 
 3.	Then type [vagrant up] to launch your virtual machine.
 Once it is up and running, type [vagrant ssh] 
