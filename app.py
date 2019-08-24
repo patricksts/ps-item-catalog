@@ -21,9 +21,7 @@ APPLICATION_NAME = "Item-Catalog-Project"
 
 
 # CONNECT
-engine = create_engine(
-    'sqlite:///catalog.db', connect_args={
-        'check_same_thread': False})
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -386,4 +384,4 @@ def disconnect():
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
