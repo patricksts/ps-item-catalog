@@ -2,7 +2,7 @@ from dbsetup import Place, Base, Thing, User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///places.db')
+engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)

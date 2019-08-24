@@ -20,9 +20,9 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Item-Catalog-Project"
 
 
-# Connect to Database and create database session
+# CONNECT
 engine = create_engine(
-    'sqlite:///places.db', connect_args={
+    'sqlite:///catalog.db', connect_args={
         'check_same_thread': False})
 Base.metadata.bind = engine
 
@@ -30,7 +30,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# Create anti-forgery state token
+# CREATE TOKEN
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -144,12 +144,17 @@ def getUserInfo(user_id):
     return user
 
 
+class NotFoundError():
+    def __init__(self, arg):
+        self.args = arg
+
+
 def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except ImportError:
-        platform_specific_module = None
+    except:
+        print("User email not found.")
 
 
 @app.route('/gdisconnect')
@@ -232,6 +237,10 @@ def editPlace(place_id):
         Place).filter_by(id=place_id).one()
     if 'username' not in login_session:
         return redirect('/login')
+    if editedPlace.user_id != login_session['user_id']:
+        return (
+            "<script>function theAlert() {alert('This ain't your place!" +
+            "Make your own.');}</script><body onload='theAlert()'>")
     if request.method == 'POST':
         if request.form['name']:
             editedPlace.name = request.form['name']
@@ -248,6 +257,10 @@ def deletePlace(place_id):
         Place).filter_by(id=place_id).one()
     if 'username' not in login_session:
         return redirect('/login')
+    if deletePlace.user_id != login_session['user_id']:
+        return (
+            "<script>function theAlert() {alert('This ain't your place!" +
+            "Make your own.');}</script><body onload='theAlert()'>")
     if request.method == 'POST':
         session.delete(placeToDelete)
         flash('%s is no more.' % placeToDelete.name)
@@ -304,6 +317,11 @@ def editThing(place_id, thing_id):
         return redirect('/login')
     editedThing = session.query(Thing).filter_by(id=thing_id).one()
     place = session.query(Place).filter_by(id=place_id).one()
+    if login_session['user_id'] != place.user_id:
+        return (
+            "<script>function myFunction()" +
+            "{alert('This is not your thing!');}</script>" +
+            "<body onload='myFunction()'>")
     if request.method == 'POST':
         if request.form['name']:
             editedThing.name = request.form['name']
@@ -331,6 +349,11 @@ def deleteThing(place_id, thing_id):
         return redirect('/login')
     place = session.query(Place).filter_by(id=place_id).one()
     thingToDelete = session.query(Thing).filter_by(id=thing_id).one()
+    if login_session['user_id'] != place.user_id:
+        return (
+            "<script>function myFunction()" +
+            "{alert('This is not your thing!');}</script>" +
+            "<body onload='myFunction()'>")
     if request.method == 'POST':
         session.delete(thingToDelete)
         session.commit()
@@ -363,4 +386,4 @@ def disconnect():
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = False
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=5000)
