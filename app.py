@@ -207,7 +207,7 @@ def places_JSON():
 def showPlaces():
     places = session.query(Place).order_by(asc(Place.name))
     if 'username' not in login_session:
-        return render_template('open_places.html', places=places)
+        return render_template('openplaces.html', places=places)
     else:
         return render_template('places.html', places=places)
 
@@ -225,7 +225,7 @@ def newPlace():
         session.commit()
         return redirect(url_for('showPlaces'))
     else:
-        return render_template('new_place.html')
+        return render_template('newplace.html')
 
 
 # EDIT PLACE
@@ -245,7 +245,7 @@ def editPlace(place_id):
             flash('Yup. You have changed %s' % editedPlace.name)
             return redirect(url_for('showPlaces'))
     else:
-        return render_template('edit_place.html', place=editedPlace)
+        return render_template('editplace.html', place=editedPlace)
 
 
 # DELETE PLACE
@@ -265,7 +265,7 @@ def deletePlace(place_id):
         session.commit()
         return redirect(url_for('showPlaces', place_id=place_id))
     else:
-        return render_template('delete_place.html', place=placeToDelete)
+        return render_template('deleteplace.html', place=placeToDelete)
 
 
 # SHOW LIST
@@ -281,7 +281,7 @@ def showList(place_id):
 
     if 'username' not in login_session:
         #  or creator.id != login_session['user_id']
-        return render_template('open_list.html', things=things, place=place)
+        return render_template('openlist.html', things=things, place=place)
     else:
         return render_template('list.html', things=things, place=place)
 
@@ -303,7 +303,7 @@ def newThing(place_id):
         flash('New thing %s is in there' % (newThing.name))
         return redirect(url_for('showList', place_id=place_id))
     else:
-        return render_template('new_thing.html', place_id=place_id)
+        return render_template('newthing.html', place_id=place_id)
 
 
 # EDIT THING
@@ -333,7 +333,7 @@ def editThing(place_id, thing_id):
         return redirect(url_for('showList', place_id=place_id))
     else:
         return render_template(
-            'edit_thing.html',
+            'editthing.html',
             place_id=place_id,
             thing_id=thing_id, thing=editedThing)
 
@@ -358,7 +358,7 @@ def deleteThing(place_id, thing_id):
         flash('Your thing is gone.')
         return redirect(url_for('showList', place_id=place_id))
     else:
-        return render_template('delete_thing.html', thing=thingToDelete)
+        return render_template('deletething.html', thing=thingToDelete)
 
 
 # DISCONNECT
